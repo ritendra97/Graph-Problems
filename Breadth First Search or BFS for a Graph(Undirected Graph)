@@ -1,44 +1,42 @@
-Breadth First Search or BFS for a Graph(Undirected Graph)
 import java.util.*;
 public class GraphProblem 
 {
-	private int V;
-	private LinkedList<Integer> adj[];
+	ArrayList<ArrayList<Integer>> adj;
+	boolean visited[];
 	GraphProblem(int v)
 	{
-		V=v;
-		adj = new LinkedList[v];
+		adj = new ArrayList<>();
+		visited=new boolean[v];
 		for(int i=0;i<v;i++)
 		{
-			adj[i]=new LinkedList();
+			adj.add(i,new ArrayList<Integer>());
 		}
 	}
-	void addEdge(int v,int w)
+	void addEdge(int v,int e)
 	{
-		adj[v].add(w);
+		adj.get(v).add(e);
+		adj.get(e).add(v);
 	}
-	void BFS(int s)
-    {
-		boolean visited[] = new boolean[V];
-		LinkedList<Integer> q = new LinkedList<>();
-		visited[s]=true;
-		q.add(s);
+	public void BFS(int startindex)
+	{
+		Queue<Integer> q = new LinkedList<>();
+		visited[startindex]=true;
+		q.add(startindex);
 		while(!q.isEmpty())
 		{
-			s=q.poll();
-			System.out.print(s+" ");
-			Iterator<Integer> i = adj[s].listIterator();
-			while(i.hasNext())
+			Integer node = q.poll();
+			System.out.print(node+" ");
+			List<Integer> childList = adj.get(node);
+			for(Integer child : childList)
 			{
-				int n = i.next();
-				if(!visited[n])
+				if(!visited[child])
 				{
-					visited[n]=true;
-					q.add(n);
+					q.add(child);
+					visited[child]=true;
 				}
 			}
 		}
-    }
+	}
 	public static void main(String[] args) 
 	{
 		GraphProblem g = new GraphProblem(4);
@@ -50,8 +48,7 @@ public class GraphProblem
         g.addEdge(2, 3);
         g.addEdge(3, 3);
  
-        System.out.println("Following is Breadth First Traversal "+
-                           "(starting from vertex 2)");
+        System.out.println("Following is Breadth First Traversal "+"(starting from vertex 2)");
  
         g.BFS(2);
 	}
