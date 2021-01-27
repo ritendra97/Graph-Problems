@@ -1,0 +1,59 @@
+//Depth First Search or DFS for a Graph(Undirected Graph) Iterative method
+import java.util.*;
+//undirected Graph
+public class GraphProblem 
+{
+	ArrayList<ArrayList<Integer>> adj;
+	boolean visited[];
+	GraphProblem(int v)
+	{
+		adj = new ArrayList<>();
+		visited=new boolean[v];
+		for(int i=0;i<v;i++)
+		{
+			adj.add(i,new ArrayList<Integer>());
+		}
+	}
+	void addEdge(int v,int e)
+	{
+		adj.get(v).add(e);
+		adj.get(e).add(v);
+	}
+	public void DFS(int start)
+	{
+		Stack<Integer> st = new Stack<>();
+		st.push(start);
+		visited[start]=true;
+		while(!st.isEmpty())
+		{
+			Integer node = st.pop();
+			System.out.print(node+" ");
+			List<Integer> childList = adj.get(node);
+			for(Integer child:childList)
+			{
+				if(!visited[child])
+				{
+					st.push(child);
+					visited[child]=true;
+				}
+			}
+		}
+	}
+	public static void main(String[] args) 
+	{
+		GraphProblem g = new GraphProblem(4);
+		 
+        g.addEdge(0, 1);
+        g.addEdge(0, 2);
+        g.addEdge(1, 2);
+        g.addEdge(2, 0);
+        g.addEdge(2, 3);
+        g.addEdge(3, 3);
+ 
+        System.out.println(
+            "Following is Depth First Traversal "
+            + "(starting from vertex 2)");
+ 
+        g.DFS(2);
+	}
+}
