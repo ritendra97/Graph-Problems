@@ -1,0 +1,62 @@
+//Transpose graph
+import java.util.*;
+public class GraphProblem 
+{	
+	private int V;
+	ArrayList<ArrayList<Integer>> graph;
+	ArrayList<ArrayList<Integer>> transpose;
+	GraphProblem(int v)
+	{
+	    V=v;
+	    graph = new ArrayList<ArrayList<Integer>>(V);
+	    transpose = new ArrayList<ArrayList<Integer>>(V);
+	    for(int i =0;i<V;i++)
+	    {
+    		graph.add(i,new ArrayList<Integer>());
+    		transpose.add(i,new ArrayList<Integer>());
+	   	}
+	}
+	public void addEdge(int v,int w,boolean choice)
+	{
+		if(!choice)
+		    graph.get(v).add(w);
+		else
+			transpose.get(v).add(w);
+	}
+	public void printGraph()
+	{
+		for(int i=0;i<V;i++)
+		{
+			System.out.println("\nAdjacency list of vertex " + i);
+			System.out.print("head");
+			for(int j=0;j<transpose.get(i).size();j++)
+			{
+				System.out.print("-> "+transpose.get(i).get(j));
+			}
+			System.out.println();
+		}
+	}
+	public void maketranspose()
+	{
+		for(int i=0;i<V;i++)
+		{
+			for(int j=0;j<graph.get(i).size();i++)
+			{
+				addEdge(graph.get(i).get(j),i,true);
+			}
+		}
+	}
+	public static void main(String[] args) 
+	{
+		GraphProblem g = new GraphProblem(7);
+		g.addEdge(0, 1,false);
+		g.addEdge(0, 4,false);
+		g.addEdge(0, 3,false);
+		g.addEdge(2, 0,false);
+		g.addEdge(3, 2,false);
+		g.addEdge(4, 3,false);
+		g.addEdge(4, 1,false);
+		g.maketranspose();
+		g.printGraph();
+	}
+}
