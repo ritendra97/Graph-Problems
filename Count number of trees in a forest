@@ -1,0 +1,62 @@
+//Count number of trees in a forest
+import java.util.*;
+public class GraphProblem 
+{
+	private int V;
+	ArrayList<ArrayList<Integer>> graph;
+    boolean visited[];
+    int count=0;
+	GraphProblem(int v)
+	{
+		V=v;
+		graph = new ArrayList<ArrayList<Integer>>(V);
+		visited = new boolean[V];
+		for(int i=0;i<V;i++)
+		{
+			graph.add(new ArrayList<Integer>());
+		}
+	}
+	public void addEdge(int u,int v)
+	{
+		graph.get(u).add(v);
+	}
+	public void DFSUtil(int v)
+	{
+		Stack<Integer> st = new Stack<Integer>();
+		visited[v]=true;
+		st.push(v);
+		while(!st.isEmpty())
+		{
+			int node = st.pop();
+			List<Integer> childList = graph.get(node);
+			for(Integer child:childList)
+			{
+				if(!visited[child])
+				{
+					visited[child]=true;
+					st.push(child);
+				}
+			}
+		}
+	}
+	public int counttrees()
+	{
+		for(int i=0;i<V;i++)
+		{
+			if(visited[i]==false)
+			{
+				DFSUtil(i);
+				count++;
+			}
+		}
+		return count;
+	}
+	public static void main(String[] args) 
+	{
+		GraphProblem g = new GraphProblem(5);
+		g.addEdge(0, 1);
+		g.addEdge(0, 2);
+		g.addEdge(3, 4);
+		System.out.println("The no of trees is: "+g.counttrees());
+	}
+}
