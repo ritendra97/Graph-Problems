@@ -1,0 +1,52 @@
+//Print all paths from a given source to a destination
+import java.util.*;
+public class GraphProblem 
+{
+	int V;
+	ArrayList<ArrayList<Integer>> graph;
+	boolean visited[];
+	GraphProblem(int v)
+	{
+		V=v;
+		visited = new boolean[V];
+		graph = new ArrayList<ArrayList<Integer>>(V);
+		for(int i=0;i<V;i++)
+		{
+			graph.add(i,new ArrayList<Integer>());
+		}
+	}
+	public void addEdge(int v,int w)
+	{
+		graph.get(v).add(w);
+	}
+	public void dfs(int s,int d,String psf)// Plese have a look on blank string baise u know about it but plaese.
+	{
+		if(s==d)
+		{
+			System.out.println(psf);
+			return;
+		}
+		visited[s]=true;
+		for(Integer child:graph.get(s))
+		{
+			if(!visited[child])
+			     dfs(child,d,psf+child);
+		}	
+		visited[s]=false;
+	}
+	public void allpathsources(int s, int d)
+	{
+		dfs(s,d,s+"");
+	}		
+	public static void main(String[] args) 
+	{
+		GraphProblem g = new GraphProblem(4); 
+        g.addEdge(0, 1); 
+        g.addEdge(0, 2); 
+        g.addEdge(0, 3); 
+        g.addEdge(2, 0); 
+        g.addEdge(2, 1); 
+        g.addEdge(1, 3);
+		g.allpathsources(2,3);
+	}
+}
