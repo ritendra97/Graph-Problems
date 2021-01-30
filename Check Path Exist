@@ -1,0 +1,54 @@
+//Check Path Exist
+import java.util.*;
+public class GraphProblem 
+{
+	int V;
+	ArrayList<ArrayList<Integer>> graph;
+	boolean visited[];
+	GraphProblem(int v)
+	{
+		V=v;
+		visited = new boolean[V];
+		graph = new ArrayList<ArrayList<Integer>>(V);
+		for(int i=0;i<V;i++)
+		{
+			graph.add(i,new ArrayList<Integer>());
+		}
+	}
+	public void addEdge(int v,int w)
+	{
+		graph.get(v).add(w);
+	}
+	public boolean dfshasPath(int src, int des)
+	{
+		if(src==des)
+			return true;
+		visited[src]=true;
+		for(Integer nbr:graph.get(src))
+		{
+			if(!visited[nbr])
+			{
+				boolean hasnbrPath = dfshasPath(nbr,des);
+				if(hasnbrPath==true)
+					return true;
+			}
+		}
+		return false;
+	}
+	public void sourcedesPath(int src,int des)
+	{
+		boolean answer = dfshasPath(src,des);
+		if(answer)
+			System.out.println("Yes path exist:");
+		else
+			System.out.println("path doesn't exist:");
+	}
+	public static void main(String[] args) 
+	{
+		GraphProblem g = new GraphProblem(5);
+		g.addEdge(1, 2);
+	    g.addEdge(2, 3);
+	    g.addEdge(1, 4);
+	    g.sourcedesPath(1,4);
+	}
+}
