@@ -62,3 +62,102 @@ public class GraphProblem
 	}
 
 }
+// this is optimize solution
+import java.util.*;
+class Node
+{
+	int data;
+	Node left;
+	Node right;
+	Node(int data)
+	{
+		this.data=data;
+		this.left=null;
+		this.right=null;
+	}
+}
+public class GraphProblem 
+{
+	/*static Node root = null;
+	static HashMap<Integer,Node> map = new HashMap<>();
+	public static Node parentarraytree(int parentarray[])
+	{
+		for(int i=0;i<parentarray.length;i++)
+		{
+			Node new_node = new Node(i);
+			map.put(i, new_node);
+		}
+		for(int i=0;i<parentarray.length;i++)
+		{
+	          if(parentarray[i]==-1)
+	          {
+	        	  root=map.get(i);
+	          }
+	          else
+	          {
+	        	  if(map.get(parentarray[i]).left==null)
+	        		  map.get(parentarray[i]).left = map.get(i);
+	        	  else
+	        		  map.get(parentarray[i]).right = map.get(i);
+	          }
+		}
+		return root;
+	}
+	static int binarytreeheight(Node root)
+	{
+		if(root==null)
+			return 0;
+		else
+		{
+			int ldepth=binarytreeheight(root.left);
+			int rdepth=binarytreeheight(root.right);
+			if(ldepth>rdepth)
+				return ldepth+1;
+			else
+				return rdepth+1;
+		}
+	}*/
+	public static int fillheight(int p[],int node,int height[],boolean visited[])
+	{
+		if(p[node]==-1)
+		{
+			visited[node]=true;
+			return 0;
+		}
+		if(visited[node])
+			return height[node];
+		visited[node]=true;
+		height[node]=1+fillheight(p,p[node],height,visited);//is per jayega hi jayega chaahe bo true return kyo na kre please have a look on debug of code
+		return height[node];
+	}
+	public static int findheight(int parent[],int n)
+	{
+		int mo=0;
+		int ans=0;
+		int height[] = new int[n];
+		boolean visited[]= new boolean[n];
+		for(int i=0;i<n;i++)
+		{
+			height[i]=0;
+			visited[i]=false;
+		}
+		for(int i=0;i<n;i++)
+		{
+			if(!visited[i])
+			{
+				ans=fillheight(parent,i,height,visited);
+			}
+			mo = Math.max(mo, ans);
+		}
+		return mo;
+	}
+	public static void main(String[] args) 
+	{
+		int parent[] = { -1, 0, 0, 0, 3, 1, 1, 2 };
+	//	Node root=parentarraytree(parent);
+		//System.out.println(binarytreeheight(root));
+		int n = parent.length;
+		System.out.println(findheight(parent,n));
+	}
+
+}
