@@ -1,0 +1,56 @@
+//Is Graph Connected
+// It is related to the previous  question(get all component of the graph)is we ahve only one component than it's indicate that the whole graph is connected otherwise flase.
+import java.util.*;
+public class GraphProblem 
+{
+	int V;
+	ArrayList<ArrayList<Integer>> graph;
+	boolean visited[];
+	GraphProblem(int v)
+	{
+		V=v;
+		visited = new boolean[V];
+		graph = new ArrayList<ArrayList<Integer>>(V);
+		for(int i=0;i<V;i++)
+		{
+			graph.add(i,new ArrayList<Integer>());
+		}
+	}
+	public void addEdge(int v,int w)
+	{
+		graph.get(v).add(w);
+	}
+	public void dfs(ArrayList<ArrayList<Integer>> result,ArrayList<Integer> path,int s)
+	{
+		path.add(s);
+		visited[s]=true;
+		for(Integer j:graph.get(s))
+		{
+			if(!visited[j])
+			     dfs(result,path,j);
+		}
+	}
+	public boolean getconnectedcomponents(int v)
+	{
+		ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+		
+		for(int i=0;i<v;i++)
+		{
+			if(!visited[i])
+			{
+				ArrayList<Integer> path = new ArrayList<Integer>();
+				dfs(result,path,i);
+				result.add(path);
+			}
+		}
+		if(result.size()==1)
+			return true;
+		return false;
+	}
+	public static void main(String[] args)
+	{
+		GraphProblem g = new GraphProblem(2);
+		g.addEdge(0, 1);
+		System.out.println(g.getconnectedcomponents(2));
+	}
+}
