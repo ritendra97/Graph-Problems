@@ -1,0 +1,67 @@
+//perfect friends problem--> in this problem you will have certains numbers of friends whic belongs to different clubs u need to 
+//make a perfect pair in which frieds must belongs to different clubs
+import java.util.ArrayList;
+public class GraphProblem 
+{
+	int V;
+	ArrayList<ArrayList<Integer>> graph;
+	boolean visited[];
+	GraphProblem(int v)
+	{
+		V=v;
+		visited = new boolean[V];
+		graph = new ArrayList<ArrayList<Integer>>(V);
+		for(int i=0;i<V;i++)
+		{
+			graph.add(i,new ArrayList<Integer>());
+		}
+	}
+	public void addEdge(int v,int w)
+	{
+		graph.get(v).add(w);
+	}
+	public void dfs(ArrayList<ArrayList<Integer>> result,ArrayList<Integer> path,int s)
+	{
+		path.add(s);
+		visited[s]=true;
+		for(Integer j:graph.get(s))
+		{
+			if(!visited[j])
+			     dfs(result,path,j);
+		}
+	}
+	public int getconnectedcomponents(int v)
+	{
+		int count=0;
+		int pair=0;
+		ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+		for(int i=0;i<v;i++)
+		{
+		    if(!visited[i])
+			{
+				ArrayList<Integer> path = new ArrayList<Integer>();
+				dfs(result,path,i);
+				result.add(path);
+			}
+		}
+		for(int i=0;i<result.size();i++)
+		{
+			for(int j=i+1;j<result.size();j++)
+			{
+				count = result.get(i).size()*result.get(j).size();
+				pair+=count;
+			}
+		}
+		return pair;
+	}
+	public static void main(String[] args)
+	{
+		GraphProblem g = new GraphProblem(7);
+		g.addEdge(0, 1);
+		g.addEdge(2, 3);
+		g.addEdge(4, 5);
+		g.addEdge(5, 6);
+		g.addEdge(4, 6);
+		System.out.println(g.getconnectedcomponents(7));
+	}
+}
