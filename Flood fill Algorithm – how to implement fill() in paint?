@@ -1,0 +1,133 @@
+//Flood fill Algorithm – how to implement fill() in paint?
+import java.util.*;
+public class GraphProblem 
+{
+	static void floodFillUtil(int screen[][], int x, int y,int prevC, int newC)
+    {
+		if(x<0 || y<0 || x>screen.length-1 || y>screen[0].length-1|| screen[x][y]!=prevC)
+			return;
+		if(screen[x][y]==prevC)
+		{
+			screen[x][y]=newC;
+		}
+		floodFillUtil(screen,x-1,y,prevC,newC);
+		floodFillUtil(screen,x,y-1,prevC,newC);
+		floodFillUtil(screen,x+1,y,prevC,newC);
+		floodFillUtil(screen,x,y+1,prevC,newC);
+    }
+	static void floodFill(int screen[][], int x, int y, int newC)
+	{
+		int prevC= screen[x][y];
+		floodFillUtil(screen,x,y,prevC,newC);
+	}
+	static void print(int screen[][])
+	{
+		for(int i=0;i<screen.length;i++)
+		{
+			for(int j=0;j<screen[0].length;j++)
+			{
+				System.out.print(screen[i][j]+" ");
+			}
+			System.out.println();
+		}
+	}
+	public static void main(String[] args) 
+	{
+		int screen[][] = {{1, 1, 1, 1, 1, 1, 1, 1},
+                          {1, 1, 1, 1, 1, 1, 0, 0},
+                          {1, 0, 0, 1, 1, 0, 1, 1},
+                          {1, 2, 2, 2, 2, 0, 1, 0},
+                          {1, 1, 1, 2, 2, 0, 1, 0},
+                          {1, 1, 1, 2, 2, 2, 2, 0},
+                          {1, 1, 1, 1, 1, 2, 1, 1},
+                          {1, 1, 1, 1, 1, 2, 2, 1}};
+		int x = 4, y = 4, newC = 3;
+		floodFill(screen,x,y,newC);
+		print(screen);
+	}
+}
+// USing BFS
+ import java.util.*;
+class coordinate
+{
+	int x;
+	int y;
+	coordinate(int x,int y)
+	{
+		this.x=x;
+		this.y=y;
+	}
+}
+public class GraphProblem 
+{
+	static boolean issafe(int screen[][],int a,int b)
+	{
+		if(a>=0 && b>=0 && a<screen.length && b<screen[0].length)
+			return true;
+		return false;
+	}
+	static void floodFill(int screen[][], int x, int y, int newC)
+	{
+		int prevC= screen[x][y];
+		Queue<coordinate> q = new LinkedList<>();
+		screen[x][y]=newC;
+		q.add(new coordinate(x,y));
+		while(!q.isEmpty())
+		{
+			coordinate temp = q.remove();
+			if(issafe(screen,temp.x-1,temp.y) && screen[temp.x-1][temp.y]==prevC)
+			{
+				screen[temp.x-1][temp.y]=newC;
+				temp.x--;
+				q.add(new coordinate(temp.x,temp.y));
+				temp.x++;
+		    }
+			if(issafe(screen,temp.x+1,temp.y)&& screen[temp.x+1][temp.y]==prevC)
+			{
+				screen[temp.x+1][temp.y]=newC;
+				temp.x++;
+				q.add(new coordinate(temp.x,temp.y));
+				temp.x--;
+			}
+			if(issafe(screen,temp.x,temp.y-1) && screen[temp.x][temp.y-1]==prevC)
+			{
+				screen[temp.x][temp.y-1]=newC;
+				temp.y--;
+				q.add(new coordinate(temp.x,temp.y));
+				temp.y++;
+			}
+			if(issafe(screen,temp.x,temp.y+1) && screen[temp.x][temp.y+1]==prevC)
+			{
+				screen[temp.x][temp.y+1]=newC;
+				temp.y++;
+				q.add(new coordinate(temp.x,temp.y));
+				temp.y--;
+			}
+		}
+	}
+	static void print(int screen[][])
+	{
+		for(int i=0;i<screen.length;i++)
+		{
+			for(int j=0;j<screen[0].length;j++)
+			{
+				System.out.print(screen[i][j]+" ");
+			}
+			System.out.println();
+		}
+	}
+	public static void main(String[] args) 
+	{
+		int screen[][] = {{1, 1, 1, 1, 1, 1, 1, 1},
+                          {1, 1, 1, 1, 1, 1, 0, 0},
+                          {1, 0, 0, 1, 1, 0, 1, 1},
+                          {1, 2, 2, 2, 2, 0, 1, 0},
+                          {1, 1, 1, 2, 2, 0, 1, 0},
+                          {1, 1, 1, 2, 2, 2, 2, 0},
+                          {1, 1, 1, 1, 1, 2, 1, 1},
+                          {1, 1, 1, 1, 1, 2, 2, 1}};
+		int x = 4, y = 4, newC = 3;
+		floodFill(screen,x,y,newC);
+		print(screen);
+	}
+}
