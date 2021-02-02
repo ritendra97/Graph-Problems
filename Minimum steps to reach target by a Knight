@@ -1,0 +1,60 @@
+import java.util.*;
+class coordinate
+{
+	int first;
+	int second;
+	static int dis;
+	coordinate(int first,int second,int dis)
+	{
+		this.first=first;
+		this.second=second;
+		this.dis=dis;
+	}
+}
+public class GraphProblem 
+{
+	static boolean issafe(int i,int j,int N)
+	{
+		return (i>=1 && j>=1 && i<=N && j<=N);
+	}
+    static int minStepToReachTargetUtil(int knightPos[], int targetPos[],int N) 
+	{
+    	boolean visited[][]= new boolean[N+1][N+1];
+    	int xMove[] = { -2, -1, 1, 2, -2, -1, 1, 2 };
+        int yMove[] = { -1, -2, -2, -1, 1, 2, 2, 1 };
+        Queue<coordinate> q = new LinkedList<>();
+        q.add(new coordinate(knightPos[0],knightPos[1],0));
+        visited[knightPos[0]][knightPos[1]]=true;
+        while(!q.isEmpty())
+        {
+        	coordinate temp = q.remove();
+        	if(temp.first == targetPos[0]&& temp.second == targetPos[1])
+        	{
+        		return temp.dis;
+        	}
+        	for(int k=0;k<8;k++)
+            {
+        		int x_move = temp.first+xMove[k];
+        		int y_move = temp.second+yMove[k];
+            	if(issafe(x_move,y_move,N) &&!visited[x_move][y_move])
+            	{
+            		visited[x_move][y_move]=true;
+            		q.add(new coordinate(x_move,y_move,temp.dis+1));
+            	}
+            }
+        }
+        return 0;
+	}
+	static int minStepToReachTarget(int knightPos[], int targetPos[],int N) 
+	{	
+		int ans=minStepToReachTargetUtil(knightPos,targetPos,N);
+		return ans;
+	}
+	public static void main(String[] args) 
+	{
+		int N = 30; 
+        int knightPos[] = {1,1}; 
+        int targetPos[] = {30,30}; 
+        System.out.println(minStepToReachTarget(knightPos, targetPos, N));
+	}
+}
