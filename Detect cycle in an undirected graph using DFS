@@ -13,7 +13,7 @@ public class GraphProblem
 		{
 			if(!visited[i])
 			{
-				if(iscycle(adj,visited,-1,i))
+				if(iscycle(adj,visited,-1,i))// Here -1 indecates that that is it's starting point.
 					return true;
 			}
 		}
