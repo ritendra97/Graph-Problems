@@ -1,0 +1,60 @@
+//Topological Sort Using DFS
+import java.util.*;
+public class Graph 
+{
+	int V;
+	ArrayList<ArrayList<Integer>> graph;
+	boolean visited[];
+    Graph(int v)
+	{
+		V=v;
+		graph = new ArrayList<ArrayList<Integer>>(V);
+		visited = new boolean[V];
+		for(int i=0;i<v;i++)
+		{
+			visited[i]=false;
+			graph.add(i, new ArrayList<Integer>());
+		}
+	}
+    public void addEdge(int v,int u)
+    {
+    	graph.get(v).add(u);
+    }
+    
+    public void dfsUtil(int src,Stack<Integer> s)
+    {
+    	visited[src]=true;
+    	for(Integer child :graph.get(src))
+    	{
+    		if(!visited[child])
+    			dfsUtil(child,s);
+    	}
+    	s.push(src);
+    }
+    public void topologicalsor()
+    {
+    	Stack<Integer> s = new Stack<>();
+    	for(int i =0;i<V;i++)
+    	{
+    		if(!visited[i])
+    		{
+    			dfsUtil(i,s);
+    		}
+    	}
+    	while(!s.isEmpty())
+    	{
+    		System.out.println(s.pop());
+    	}
+    }
+	public static void main(String[] args) 
+	{
+		Graph g = new Graph(6); 
+        g.addEdge(5, 2); 
+        g.addEdge(5, 0); 
+        g.addEdge(4, 0); 
+        g.addEdge(4, 1); 
+        g.addEdge(2, 3); 
+        g.addEdge(3, 1); 
+        g.topologicalsor();
+	}
+}
