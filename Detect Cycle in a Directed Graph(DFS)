@@ -19,7 +19,7 @@ public class GraphProblem
 	{
 		if(recursion[index])
 			return true;
-		if(visited[index])
+		if(visited[index]==true && recursion[index]==false)
 			return false;
 		visited[index]=true;
 		recursion[index]=true;
