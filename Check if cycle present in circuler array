@@ -1,0 +1,52 @@
+Check if cycle present in circuler array
+
+public class Graph 
+{
+	public static boolean isCycle(int arr[],int n)
+	{
+		if(arr.length <= 1) {
+		      return false;
+		    }
+		for(int i=0;i<arr.length;i++)
+		{
+			while(true)
+			{
+				int slow=i;
+				int fast=i;
+				boolean ifForward = arr[i] > 0;
+				slow = findnextindex(arr,slow,ifForward);
+				if(slow==-1)
+					break;
+				fast = findnextindex(arr, fast, ifForward);
+		        if(fast == -1) {
+		          break;
+		        }
+		        if(slow==fast)
+		        	return true;
+			}
+		}
+		return false;
+	}
+	public static int findnextindex(int arr[],int index,boolean forward)
+	{
+		boolean direction = arr[index]>0;
+		if(direction!= forward)
+			return -1;
+		int nextindex = (index+arr[index])%arr.length;
+		if(nextindex<0)
+			nextindex = nextindex+arr.length;
+		if(nextindex==index)
+			return -1;
+		return nextindex;
+ 	}
+	public static void main(String[] args) 
+	{
+		int[] arr = { 2, -1, 1, 2, 2 }; 
+		int n = arr.length; 
+		if (isCycle(arr, n) == true) 
+			System.out.println("Yes"); 
+		else
+			System.out.println("No");
+	}
+
+}
