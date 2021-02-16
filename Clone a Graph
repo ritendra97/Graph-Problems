@@ -1,4 +1,5 @@
-Clone a Graph
+// below code will come with null pointer if you run this but it is working on leetcode 
+import java.util.*;
 class Node {
     public int val;
     public List<Node> neighbors;
@@ -10,15 +11,16 @@ class Node {
         val = _val;
         neighbors = new ArrayList<Node>();
     }
-    public Node(int _val, ArrayList<Node> _neighbors) {
+    public Node(int _val, ArrayList<Node> neighbors) {
         val = _val;
-        neighbors = _neighbors;
+        neighbors = new ArrayList<Node>();
     }
 }
-class Solution {
-    public Node cloneGraph(Node node) 
-    {
-        if(node==null)
+public class Graph 
+{
+	public Node clonegraph(Node node)
+	{
+		if(node==null)
 			return null;
 		HashMap<Node,Node> map = new HashMap<>();
 		Queue<Node> q = new LinkedList<>();
@@ -38,5 +40,36 @@ class Solution {
 			}
 		}
 		return map.get(node);
+		
+	}
+	public Node buildGraph() 
+    {
+		Node node1 = new Node(1);
+		Node node2 = new Node(2);
+		Node node3 = new Node(3);
+		Node node4 = new Node(4);
+		ArrayList<Node> a = new ArrayList<Node>();
+		a.add(node2);
+		a.add(node4);
+		node1.neighbors = a;
+		a = new ArrayList<Node>();
+		a.add(node3);
+		a.add(node1);
+		node2.neighbors = a;
+		a = new ArrayList<Node>();
+		a.add(node2);
+		a.add(node4);
+		node3.neighbors=a;
+		a = new ArrayList<Node>();
+		a.add(node3);
+		a.add(node1);
+		node4.neighbors=a;
+		return node1;
     }
+	public static void main(String[] args) 
+	{
+		Graph g = new Graph();
+		Node node = g.buildGraph();
+		System.out.println(g.clonegraph(node));
+	}
 }
