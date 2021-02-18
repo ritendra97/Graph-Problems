@@ -1,0 +1,98 @@
+//Find longest path in a Directed Acyclic Graph (DAG)
+import java.util.*;
+class Edge
+{
+	int v;
+	int weight;
+	Edge(int v,int weight)
+	{
+		this.v=v;
+		this.weight=weight;
+	}
+}
+public class Graph 
+{
+	int V;
+	int j=0;
+	ArrayList<ArrayList<Edge>> graph;
+	Graph(int v)
+	{
+		V=v;
+		graph = new ArrayList<ArrayList<Edge>>(V) ;
+		for(int i=0;i<V;i++)
+		{
+			graph.add(new ArrayList<Edge>());
+		}
+	}
+	public void addEdge(int v,int u,int w)
+	{
+		graph.get(v).add(new Edge(u,w));
+	}
+	public void dfsUtil(int src,Stack<Integer> s,boolean visited[],int departure[])
+    {
+    	visited[src]=true;
+    	for(Edge child :graph.get(src))
+    	{
+    		if(!visited[child.v])
+    			dfsUtil(child.v,s,visited,departure);
+    	}
+    	departure[j++]=src;
+    }
+	public void findLongestDistance(int source)
+    {
+		Stack<Integer> s = new Stack<>();
+		boolean visited[]= new boolean[V];
+		int departure[] = new int[V];
+    	for(int i =1;i<V;i++)
+    	{
+    		if(!visited[i])
+    		{
+    			dfsUtil(i,s,visited,departure);
+    		}
+    	}
+    	int cost[] = new int[V];
+    	Arrays.fill(cost, Integer.MAX_VALUE);
+    	cost[source] = 0;
+    	 
+        // Process the vertices in topological order, i.e., in order
+        // of their decreasing departure time in DFS
+        for (int i = V - 1; i >= 0; i--)
+        {
+            // for each vertex in topological order,
+            // relax the cost of its adjacent vertices
+            int v = departure[i];
+            for (Edge e: graph.get(v))
+            {
+                // edge `e` from `v` to `u` having weight `w`
+                int u = e.v;
+                int w = e.weight * -1;    // make edge weight negative
+ 
+                // if the distance to destination `u` can be shortened by
+                // taking edge `v —> u`, then update cost to the new lower value
+                if (cost[v] != Integer.MAX_VALUE && cost[v] + w < cost[u]) {
+                    cost[u] = cost[v] + w;
+                }
+            }
+        }
+        for (int i = 0; i < V; i++) {
+            System.out.printf("dist(%d, %d) = %2d\n", source, i, cost[i] * -1);
+        }
+    	
+    }
+	public static void main(String[] args) 
+	{
+		Graph g = new Graph(8);
+		g.addEdge(0, 6, 2);
+		g.addEdge(1, 4, 1);
+		g.addEdge(3, 0, 3);
+		g.addEdge(5, 1, 2);
+		g.addEdge(7, 1, -1);
+		g.addEdge(7, 5, -4);
+		g.addEdge(1, 2, -4);
+		g.addEdge(1, 6, 8);
+		g.addEdge(3, 4, 7);
+		g.addEdge(7, 0, 6);
+		g.addEdge(7, 3, 4);
+		g.findLongestDistance(7);
+	}
+}
