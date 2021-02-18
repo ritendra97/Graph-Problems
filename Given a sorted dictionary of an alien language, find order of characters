@@ -1,0 +1,156 @@
+//Given a sorted dictionary of an alien language, find order of characters
+import java.util.*;
+class OrderOfCharacters
+{
+	LinkedList<Integer>[] graph;
+	boolean visited [];
+	OrderOfCharacters(int V)
+	{
+		visited = new boolean[V];
+		graph = new LinkedList[V];
+		for(int i=0;i<V;i++)
+		{
+			graph[i]=new LinkedList<Integer>();
+		}
+	}
+	public void addEdge(int firstvertics,int secondvertics)
+	{
+		graph[firstvertics].add(secondvertics);
+	}
+	public int noOfvertices()
+	{
+		return graph.length;
+	}
+	public void topologicalsortUtil(int src,Stack<Integer> s,boolean visited[])
+	{
+		visited[src]=true;
+		for(Integer child : graph[src])
+		{
+			if(!visited[child])
+			{
+				topologicalsortUtil(child,s,visited);
+			}
+		}
+		s.push(src);
+	}
+	public void topologicalsort()
+	{
+		Stack<Integer> s = new Stack<Integer>();
+		for(int i=0;i<noOfvertices();i++)
+		{
+			if(!visited[i])
+			{
+				topologicalsortUtil(i,s,visited);
+			}
+		}
+		while (!s.isEmpty())
+	    {
+	        System.out.print((char)('a' + s.pop()) + " ");
+	    }
+	}
+}
+public class Graph 
+{
+	private static void printOrder(String[] words, int alpha)
+    {
+		OrderOfCharacters g = new OrderOfCharacters(alpha);
+		for(int i=0;i<words.length-1;i++)
+		{
+			String w1 = words[i];
+			String w2 = words[i+1];
+			for(int j=0;j<Math.min(w1.length(),w2.length());j++)
+			{
+				if(w1.charAt(j)!=w2.charAt(j))
+				{
+					g.addEdge(w1.charAt(j)-'a',w2.charAt(j)-'a');
+					break;
+				}
+			}
+		}
+		g.topologicalsort();
+    }
+	public static void main(String[] args) 
+	{
+		String[] words = {"caa", "aaa", "aab"};
+        printOrder(words, 3);
+	}
+
+}
+// both are same littlebit change
+import java.util.*;
+class OrderOfCharacters
+{
+	ArrayList<ArrayList<Integer>> graph;
+	boolean visited [];
+	OrderOfCharacters(int V)
+	{
+		visited = new boolean[V];
+		graph = new ArrayList<ArrayList<Integer>>(V);
+		for(int i=0;i<V;i++)
+		{
+			graph.add(new ArrayList<Integer>());
+		}
+	}
+	public void addEdge(int firstvertics,int secondvertics)
+	{
+		graph.get(firstvertics).add(secondvertics);
+	}
+	public int noOfvertices()
+	{
+		return graph.size();
+	}
+	public void topologicalsortUtil(int src,Stack<Integer> s,boolean visited[])
+	{
+		visited[src]=true;
+		for(Integer child : graph.get(src))
+		{
+			if(!visited[child])
+			{
+				topologicalsortUtil(child,s,visited);
+			}
+		}
+		s.push(src);
+	}
+	public void topologicalsort()
+	{
+		Stack<Integer> s = new Stack<Integer>();
+		for(int i=0;i<noOfvertices();i++)
+		{
+			if(!visited[i])
+			{
+				topologicalsortUtil(i,s,visited);
+			}
+		}
+		while (!s.isEmpty())
+        {
+            System.out.print((char)('a' + s.pop()) + " ");
+        }
+	}
+}
+public class Graph 
+{
+	private static void printOrder(String[] words, int alpha)
+    {
+		OrderOfCharacters g = new OrderOfCharacters(alpha);
+		for(int i=0;i<words.length-1;i++)
+		{
+			String w1 = words[i];
+			String w2 = words[i+1];
+			for(int j=0;j<Math.min(w1.length(),w2.length());j++)
+			{
+				if(w1.charAt(j)!=w2.charAt(j))
+				{
+					g.addEdge(w1.charAt(j)-'a',w2.charAt(j)-'a');
+					break;
+				}
+			}
+		}
+		g.topologicalsort();
+    }
+	public static void main(String[] args) 
+	{
+		String[] words = {"caa", "aaa", "aab"};
+        printOrder(words, 3);
+	}
+
+}
