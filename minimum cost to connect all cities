@@ -1,0 +1,62 @@
+//minimum cost to connect all cities
+import java.util.*;
+public class Graph 
+{
+	static int mincost(int cost[],boolean visit[])
+	{
+		int min = Integer.MAX_VALUE;
+		int min_index=-1;
+		for(int i=0;i<cost.length;i++)
+		{
+			if(!visit[i] && cost[i]<min)
+			{
+				min = cost[i];
+				min_index = i;
+			}
+		}
+		return min_index;
+	}
+	static int findcost(int n,int city2[][])
+	{
+		int sum=0;
+		int parent[] = new int[n];
+		int cost[] = new int[n];
+		boolean visited[] = new boolean[n];
+		for(int i=0;i<n;i++)
+		{
+			cost[i]=Integer.MAX_VALUE;
+			visited[i]=false;
+		}
+		cost[0]=0;
+		parent[0]=-1;
+		for(int i=0;i<n-1;i++)
+		{
+			int u = mincost(cost,visited);
+			visited[u]=true;
+			for(int j=0;j<n;j++)
+			{
+				if(city2[u][j]!=0 && visited[j]==false && city2[u][j]<cost[j])
+				{
+					parent[j]=u;
+					cost[j]=city2[u][j];
+				}
+			}
+		}
+		for(int i=1;i<cost.length;i++)
+		{
+			sum=sum+cost[i];
+		}
+		return sum;
+    }
+	public static void main(String[] args) 
+	{
+		int n2 = 6; 
+	    int city2[][] = { { 0, 1, 1, 100, 0, 0 }, 
+	                      { 1, 0, 1, 0, 0, 0 }, 
+	                      { 1, 1, 0, 0, 0, 0 }, 
+	                      { 100, 0, 0, 0, 2, 2 }, 
+	                      { 0, 0, 0, 2, 0, 2 }, 
+	                      { 0, 0, 0, 2, 2, 0 } }; 
+	    System.out.println(findcost(n2, city2));
+	}
+}
