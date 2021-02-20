@@ -1,0 +1,30 @@
+//All Paths From Source to Target
+class Solution 
+{
+    public void allPaths(int[][] graph,int src,List<List<Integer>> ans,List<Integer> path,boolean visited[]) 
+    {    
+        path.add(src);
+        visited[src]=true;
+        if(src==graph.length-1)
+        {
+            ans.add(new ArrayList(path));
+        }
+        for(Integer i : graph[src])
+        {
+            if(!visited[i])
+            {
+                allPaths(graph,i,ans,path,visited);
+                path.remove(path.size()-1);
+            }
+        }
+        visited[src]=false;
+    }
+    public List<List<Integer>> allPathsSourceTarget(int[][] graph) 
+    {        
+        List<List<Integer>> ans =  new ArrayList();
+        List<Integer> path =  new ArrayList();
+        boolean visited[]= new boolean[graph.length];
+        allPaths(graph,0,ans,path,visited);
+        return ans;
+    }
+}
