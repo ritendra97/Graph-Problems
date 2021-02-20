@@ -1,0 +1,67 @@
+// Minimum Number of Vertices to Reach All Nodes
+import java.util.*;
+
+public class Solution 
+{
+    
+	int V;
+	static ArrayList<ArrayList<Integer>> edges;
+	boolean visited[];
+	Solution(int v)
+	{
+		V=v;
+		visited = new boolean[V];
+		edges = new ArrayList<ArrayList<Integer>>(V);
+		for(int i=0;i<V;i++)
+		{
+			edges.add(i,new ArrayList<Integer>());
+		}
+	}
+	public void addEdge(int v,int w)
+	{
+		edges.get(v).add(w);
+	}
+	public static void findSmallestUtil(int src,int n,List<Integer> path,boolean visited[]) 
+    {
+        Queue<Integer> q = new LinkedList<>();
+        q.add(src);
+        while(!q.isEmpty())
+        {
+            int temp = q.remove();
+            visited[temp]=true;
+            for(Integer j : edges.get(temp))
+            {
+                if(!visited[j])
+                   q.add(j);
+            }  
+        }       
+    }    
+    public static List<Integer> findSmallestSetOfVertices(int n) 
+    {
+        List<Integer> path = new ArrayList();
+        boolean visited[] = new boolean[n];
+        for(int i=0;i<n;i++)
+        {
+            visited[i]=false;
+        }
+        for(int i=0;i<n;i++)
+        {
+            if(!visited[i])
+            {
+                path.add(i);
+                findSmallestUtil(i,n,path,visited);
+            }
+        }
+        return path;
+    }
+	public static void main(String[] args) 
+	{
+		Solution g = new Solution(6); 
+        g.addEdge(0, 1); 
+        g.addEdge(0, 2); 
+        g.addEdge(2, 5); 
+        g.addEdge(4, 2); 
+        g.addEdge(3, 4); 
+		System.out.println(findSmallestSetOfVertices(6));
+	}
+}
