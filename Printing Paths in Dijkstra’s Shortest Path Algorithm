@@ -1,0 +1,94 @@
+//Printing Paths in Dijkstra’s Shortest Path Algorithm
+public class Graph 
+{
+	static int V=9;
+	static int findmin(int value[],boolean visited[])
+	{
+		int min=Integer.MAX_VALUE;
+		int vertex=-1;
+		for(int i=0;i<V;i++)
+		{
+			if(value[i]<min && visited[i]==false)
+			{
+				min=value[i];
+				vertex=i;
+			}
+		}
+		return vertex;
+	}
+	public static void dijkstra(int[][] graph,int src) 
+    {
+		int Parent[]=new int[V];
+		boolean visited[]=new boolean[V];
+		int distances[]=new int[V];
+		for(int i=0;i<V;i++)
+		{
+			visited[i]=false;
+			distances[i]=Integer.MAX_VALUE;
+		}
+		Parent[0]=-1;
+		distances[src]=0;
+		for(int i=1;i<V;i++)
+		{
+			int nearestvertes = -1;
+			int shortdistance=Integer.MAX_VALUE;
+			for(int j=0;j<V;j++)
+			{
+				if(!visited[j] && distances[j]<shortdistance)
+				{
+					nearestvertes =j;
+					shortdistance = distances[j];
+				}
+			}
+			visited[nearestvertes]=true;
+			for(int k=0;k<V;k++)
+			{
+				int edgedistance = graph[nearestvertes][k];
+				if(edgedistance!=0 && shortdistance+edgedistance<distances[k])
+				{
+					Parent[k]=nearestvertes;
+					distances[k]=shortdistance+edgedistance;
+				}
+			}
+			printSolution(src,distances,Parent);
+		}
+    }  
+	public static void printSolution(int startVertex,int[] distances,int[] parents) 
+    { 
+        int nVertices = distances.length; 
+        System.out.print("Vertex\t Distance\tPath"); 
+        for (int vertexIndex = 0;vertexIndex < nVertices; vertexIndex++)  
+        { 
+             if (vertexIndex != startVertex)  
+             { 
+                  System.out.print("\n" + startVertex + " -> "); 
+                  System.out.print(vertexIndex + " \t\t "); 
+                  System.out.print(distances[vertexIndex] + "\t\t"); 
+                  printPath(vertexIndex, parents); 
+             } 
+        }  
+    }  
+    public static void printPath(int currentVertex, int[] parents) 
+    { 
+         if (currentVertex == -1) 
+         { 
+            return; 
+         }  
+         printPath(parents[currentVertex], parents); 
+         System.out.print(currentVertex + " "); 
+    } 
+	public static void main(String[] args) 
+	{
+		 int[][] graph =  {{ 0, 4, 0, 0, 0, 0, 0, 8, 0 }, 
+                           { 4, 0, 8, 0, 0, 0, 0, 11,0 }, 
+                           { 0, 8, 0, 7, 0, 4, 0, 0, 2 }, 
+                           { 0, 0, 7, 0, 9, 14, 0, 0,0 }, 
+                           { 0, 0, 0, 9, 0, 10, 0, 0,0 }, 
+                           { 0, 0, 4, 0, 10, 0, 2, 0,0 }, 
+                           { 0, 0, 0, 14, 0, 2, 0, 1,6 }, 
+                           { 8, 11, 0, 0, 0, 0, 1, 0,7 }, 
+                           { 0, 0, 2, 0, 0, 0, 6, 7, 0 }}; 
+		 int src = 0;
+         dijkstra(graph, src); 
+	}
+}
