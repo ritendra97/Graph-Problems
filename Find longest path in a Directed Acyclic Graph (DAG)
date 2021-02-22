@@ -40,7 +40,6 @@ public class Graph
     }
 	public void findLongestDistance(int source)
     {
-		Stack<Integer> s = new Stack<>();
 		boolean visited[]= new boolean[V];
 		int departure[] = new int[V];
     	for(int i =1;i<V;i++)
