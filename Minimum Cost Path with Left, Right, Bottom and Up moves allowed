@@ -1,0 +1,80 @@
+//Minimum Cost Path with Left, Right, Bottom and Up moves allowed
+import java.util.*;
+class coordinator
+{
+	int x;
+	int y;
+	int w;
+	coordinator(int x,int y,int w)
+	{
+		this.x=x;
+		this.y=y;                                                              
+		this.w=w;
+	}
+} 
+public class Graph 
+{
+	static int xrow[] = {1,-1,0,0};
+	static int ycol[] = {0,0,-1,1};
+	public static boolean isSafe(int x,int y,int grid[][])
+	{
+		if(x>=0 && x<grid.length && y>=0 && y<grid.length)
+			return true;
+		return false;
+	}
+	public static int shortestPath(int grid[][],int ROW,int COL)
+	{
+		int dist[][] = new int[ROW][COL];
+		for(int i=0;i<ROW;i++)
+		{
+			for(int j=0;j<COL;j++)
+			{
+				dist[i][j]=Integer.MAX_VALUE;
+			}
+		}
+		dist[0][0]=grid[0][0];
+		PriorityQueue<coordinator> pq = new PriorityQueue<coordinator>(new Comparator<coordinator>(){
+			public int compare(coordinator c1,  coordinator c2)
+			{
+				return c1.w-c2.w;
+			}
+		});
+		pq.add(new coordinator(0,0,grid[0][0]));
+		while(!pq.isEmpty())
+		{
+			coordinator temp = pq.remove();
+			for(int i=0;i<4;i++)
+			{
+				int nx = temp.x+xrow[i];
+				int ny = temp.y+ycol[i];
+				if(isSafe(nx,ny,grid))
+				{
+					if(dist[nx][ny]>dist[temp.x][temp.y]+grid[nx][ny])
+					{
+						if(dist[nx][ny]!=Integer.MAX_VALUE)
+						{
+							coordinator adj = new coordinator(nx,ny,dist[nx][ny]);
+							pq.remove(adj);
+						}
+						dist[nx][ny]=dist[temp.x][temp.y]+grid[nx][ny];
+						pq.add(new coordinator(nx,ny,dist[nx][ny]));
+					}
+				}
+			}
+		}
+		return dist[ROW-1][COL-1];
+	}
+	public static void main(String[] args) 
+	{
+
+	    int[][] grid = { { 31, 100, 65, 12, 18 }, 
+	                     { 10, 13, 47, 157, 6 }, 
+	                     { 100, 113, 174, 11, 33 }, 
+	                     { 88, 124, 41, 20, 140 }, 
+	                     { 99, 32, 111, 41, 20 } }; 
+	    int ROW=5;
+	    int COL=5;
+	    System.out.println(shortestPath(grid, ROW, COL)); 
+	}
+
+}
