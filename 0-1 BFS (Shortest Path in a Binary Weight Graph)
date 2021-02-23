@@ -1,0 +1,105 @@
+//0-1 BFS (Shortest Path in a Binary Weight Graph)
+import java.util.ArrayList;
+import java.util.*;
+class Edge
+{
+	int v;
+	int dis;
+	Edge(int v,int dis)
+	{
+		this.v=v;
+		this.dis=dis;
+	}
+}
+class Index
+{
+	int index=0;
+}
+public class Graph 
+{
+	int V;
+	ArrayList<ArrayList<Edge>> graph;
+	boolean visited[];
+	Graph(int v)
+	{
+		V=v;
+		graph = new ArrayList<ArrayList<Edge>>(V);
+		visited = new boolean[V];
+		for(int i=1;i<=V;i++)
+		{
+			graph.add(new ArrayList<Edge>());
+		}
+	}
+	void addEdge(int u,int v,int dis)
+	{
+		graph.get(u).add(new Edge(v,dis));
+		graph.get(v).add(new Edge(u,dis));
+	}	
+	public void zeroOneBFSUtil(int src,int dist[],boolean visited[],int pred[])
+	{
+		Queue<Integer> q = new LinkedList<Integer>();
+		q.add(src);
+		while(!q.isEmpty())
+		{
+			int u = q.remove();
+			visited[u]=true;
+			for(Edge e : graph.get(u))
+			{
+				int v = e.v;
+				int dis = e.dis;
+				if(!visited[v])
+				{
+					if(dist[u]+dis<dist[v]);
+					{
+						dist[v]=dist[u]+dis;
+						pred[v]=u;
+					}
+					q.add(v);
+					visited[v]=true;
+				}
+			}
+		}
+	}
+	public void printarray(int dist[])
+	{
+		for(int i=0;i<V;i++)
+		{
+			System.out.println(dist[i]);
+		}
+	}
+	public void zeroOneBFS(int src)
+	{
+		  int dist[] = new int[V];
+		  int pred[] = new int[V];
+		  boolean visited[] = new boolean[V];
+		  for(int i=0;i<V;i++)
+		  {
+			  dist[i]=Integer.MAX_VALUE;
+			  visited[i]=false;
+			  pred[i]=-1;
+		  }
+		  dist[src]=0;
+		  zeroOneBFSUtil(src,dist,visited,pred);
+		  printarray(dist);
+	}
+	public static void main(String[] args) 
+	{
+		Graph g = new Graph(9);
+		g.addEdge(0, 1, 0); 
+	    g.addEdge(0, 7, 1); 
+	    g.addEdge(1, 7, 1); 
+	    g.addEdge(1, 2, 1); 
+	    g.addEdge(2, 3, 0); 
+	    g.addEdge(2, 5, 0); 
+	    g.addEdge(2, 8, 1); 
+	    g.addEdge(3, 4, 1); 
+	    g.addEdge(3, 5, 1); 
+	    g.addEdge(4, 5, 1); 
+	    g.addEdge(5, 6, 1); 
+	    g.addEdge(6, 7, 1); 
+	    g.addEdge(7, 8, 1);
+	    
+	    int src =0;
+	    g.zeroOneBFS(src);
+	}
+}
