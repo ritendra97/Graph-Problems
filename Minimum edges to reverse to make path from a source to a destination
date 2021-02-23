@@ -1,0 +1,94 @@
+//Minimum edges to reverse to make path from a source to a destination
+import java.util.*;
+class Edge
+{
+	int v;
+	int dis;
+	Edge(int v,int dis)
+	{
+		this.v=v;
+		this.dis=dis;
+	}
+}
+class Index
+{
+	int index=0;
+}
+public class Graph 
+{
+	int V;
+	ArrayList<ArrayList<Edge>> graph;
+	boolean visited[];
+	int distance[];
+	Graph(int v)
+	{
+		V=v;
+		graph = new ArrayList<ArrayList<Edge>>(V);
+		visited = new boolean[V];
+		distance = new int[V];
+		for(int i=0;i<V;i++)
+		{
+			distance[i]=Integer.MAX_VALUE;
+			graph.add(new ArrayList<Edge>());
+		}
+	}
+	public ArrayList<ArrayList<Edge>> addEdge(int newnode,int targetnode)
+	{
+		graph.get(newnode).add(new Edge(targetnode,0));
+		graph.get(targetnode).add(new Edge(newnode,1));
+		return graph;
+	}	
+	public int[] shortestpath(int src)
+	{
+		PriorityQueue<Edge> pq = new PriorityQueue<>(new Comparator<Edge>(){
+			public int compare(Edge e1,Edge e2)
+			{
+				return e1.dis-e2.dis;
+			}
+		});
+		distance[src]=0;
+		pq.add(new Edge(0,0));
+		while(!pq.isEmpty())
+		{
+			Edge temp = pq.poll();
+			int v = temp.v;
+			if(visited[v])
+				continue;
+			visited[v]=true;
+			for(Edge child : graph.get(v))
+			{
+				int dist = child.dis;
+				int childnode = child.v;
+				if(!visited[childnode] && distance[v]+dist < distance[childnode])
+				{
+					distance[childnode]=distance[v]+dist;
+					child.dis = distance[v]+dist;
+					pq.add(child);
+				}
+			}
+		}
+		return distance;
+	}
+	public int getMinEdgeReversal(int src, int dest) 
+    {
+		int distance[]=shortestpath(src);
+		if(distance[dest]==Integer.MAX_VALUE)
+			return -1;
+		else
+			return distance[dest];
+    }
+	public static void main(String[] args) 
+	{
+		Graph g = new Graph(7);
+		g.addEdge(0,1);
+		g.addEdge(2,3);
+		g.addEdge(4,5);
+		g.addEdge(6,3);
+		g.addEdge(2,1);
+		g.addEdge(5,1);
+		g.addEdge(6,4);
+		
+		System.out.println(g.getMinEdgeReversal(0,6)); 
+	
+	}
+}
