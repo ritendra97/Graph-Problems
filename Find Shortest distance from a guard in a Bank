@@ -1,0 +1,94 @@
+//Find Shortest distance from a guard in a Bank
+import java.util.*;
+class cell
+{
+	int x;
+	int y;
+	int distance;
+	cell(int x,int y,int distance)
+	{
+		this.x=x;
+		this.y=y;
+		this.distance=distance;
+	}
+}
+public class Graph 
+{
+	static int xrow[] = {-1,1,0,0};
+	static int ycol[] = {0,0,-1,1};
+	static int ROW=5;
+	static int COL=5;
+//	static boolean isvalid(int i, int j)
+//	{
+//	    if ((i < 0 || i > ROW - 1) ||(j < 0 || j > COL - 1))
+//	        return false;	 
+//	    return true;
+//	}
+	public static boolean isvalid(int x,int y)
+	{
+		if(x>=0 && x<ROW && y>=0 && y<COL)
+			return true;
+		return false;
+	}
+	static boolean isSafe(int i, int j, char matrix[][],int output[][])
+	{
+	    if (matrix[i][j] != 'O' || output[i][j] != -1)
+	        return false;
+	    return true;
+	}
+	public static void shortestdistance(char matrix[][]) 
+	{
+		int output[][] = new int[ROW][COL];
+		Queue<cell> q = new LinkedList<>();
+		for(int i=0;i<ROW;i++)
+		{
+			for(int j=0;j<COL;j++)
+			{
+				output[i][j]=-1;
+				if(matrix[i][j]=='G')
+				{
+					q.add(new cell(i,j,0));
+					output[i][j] = 0;
+				}
+			}
+		}
+		while(!q.isEmpty())
+		{
+			cell temp = q.peek();
+			
+			for(int i=0;i<4;i++)
+			{
+				int nx = temp.x+xrow[i];
+				int ny = temp.y+ycol[i];
+				int dist = temp.distance;
+				if(isvalid(nx,ny))
+				{
+					if(isSafe(nx,ny,matrix,output))
+					{
+						output[nx][ny]=dist+1;
+						q.add(new cell(nx,ny,dist+1));
+					}
+				}
+			}
+			q.poll();
+		}
+		for(int i=0;i<ROW;i++)
+		{
+			for(int j=0;j<COL;j++)
+			{
+				System.out.print(output[i][j]+" ");
+			}
+			System.out.println();
+		}
+	}
+	public static void main(String[] args) 
+	{
+
+	    char matrix[][] = {{ 'O', 'O', 'O', 'O', 'G' },
+	                        { 'O', 'W', 'W', 'O', 'O' },
+	                        { 'O', 'O', 'O', 'W', 'O' },
+	                        { 'G', 'W', 'W', 'W', 'O' },
+	                        { 'O', 'O', 'O', 'O', 'G' }};
+	    shortestdistance(matrix);
+	}
+}
