@@ -1,0 +1,81 @@
+//Sentence Similiarity
+//Given two sentences words1, words2 (each represented as an array of strings), and a list of similar word pairs pairs, determine if two sentences are similar.
+import java.util.*;
+public class GraphProblem 
+{	
+	static HashMap<String,String> parent = new HashMap<String,String>();
+	
+	static HashMap<String,Integer> rank = new HashMap<String,Integer>();
+	
+	GraphProblem(String[][] pairs)
+	{
+		for(int i=0;i<pairs.length;i++)
+		{
+			for(int j=0;j<pairs[0].length-1;j++)
+			{
+				parent.put(pairs[i][j], pairs[i][j+1]);
+				rank.put(pairs[i][j],1);
+			}
+		}
+	}
+	public static String find(String x)
+	{
+		if(x==parent.get(x))
+			return x;
+		String temp = find(parent.get(x));
+		
+		parent.put(parent.get(x),temp);
+		return temp;
+	}
+	
+	public static void union(String x1,String x2)
+	{
+		String px = find(x1);
+		String py = find(x2);
+		
+		if(px!=py)
+		{
+			if(rank.get(px)<rank.get(py))
+			{
+				parent.put(py, px);
+			}
+			else if(rank.get(px)>rank.get(py))
+			{
+				parent.put(px, py);
+			}
+			else
+			{
+				parent.put(py, px);
+				rank.put(px,rank.getOrDefault(px, 0)+1);
+			}
+		}
+	}
+	public static boolean areSentencesSimilarTwo(String[] words1, String[] words2, String[][] pairs) 
+	{
+		int n = words1.length;
+		for(int i=0;i<n;i++)
+		{
+			String s1 = find(words1[i]);
+			String s2 = find(words2[i]);
+			
+			if(s1==s2)
+				return true;
+			union(s1,s2);
+		}
+		return false;
+	}
+	public static void main(String[] args) 
+	{
+		String pairs[][] = {{"great", "good"},
+	                        {"fine", "good"},
+	                        {"acting","drama"},
+	                        {"skills","talent"}};
+		
+		GraphProblem gp = new GraphProblem(pairs);
+		
+		String words1[]= {"great", "acting", "skills"};
+		String words2[]= {"fine", "drama", "talent"};
+		
+		System.out.println(areSentencesSimilarTwo(words1, words2,pairs));
+	}
+}
