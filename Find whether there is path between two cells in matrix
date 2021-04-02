@@ -1,0 +1,71 @@
+//Find whether there is path between two cells in matrix
+import java.util.*;
+public class GraphProblem 
+{
+	static class coordinate
+	{
+		int x;
+		int y;
+		coordinate(int x,int y)
+		{
+			this.x=x;
+			this.y=y;
+		}
+	}
+	static boolean issafe(int mat[][],int x,int y,boolean visited[][])
+	{
+		if(x>=0 && y>=0 && x<mat.length && y<mat[0].length && !visited[x][y])
+			return true;
+		return false;
+	}
+	static boolean BFSUtil(int mat[][],boolean visited[][],int x,int y)
+	{
+		Queue<coordinate> q = new LinkedList<>();
+		q.add(new coordinate(x,y));
+		while(!q.isEmpty())
+		{
+			int row[] = {-1,0,0,1};
+			int col[] = {0,-1,1,0};
+			coordinate temp = q.remove();
+			if(mat[temp.x][temp.y]==0)
+				continue;
+			if(mat[temp.x][temp.y]==2)
+				return true;
+			for(int i=0;i<4;i++)
+			{
+				if(issafe(mat,temp.x+row[i],temp.y+col[i],visited))
+				{
+					visited[temp.x+row[i]][temp.y+col[i]]=true;
+					q.add(new coordinate(temp.x+row[i],temp.y+col[i]));
+				}
+			}
+		}
+		return false;
+	}
+	public static boolean isPath(int matrix[][])
+	{
+		boolean visited[][] = new boolean[matrix.length][matrix.length];
+		
+		int n = matrix.length;
+		for(int i=0;i<n;i++)
+		{
+			for(int j=0;j<matrix[0].length;j++)
+			{
+				if(matrix[i][j]==1)
+					if(BFSUtil(matrix,visited,i,j)==true)
+						return true;;
+			}
+		}
+		return false;
+	}
+	public static void main(String[] args) 
+	{
+		int matrix[][] = {{ 0, 3, 1, 0 },
+                          { 0, 0, 3, 3 },
+                          { 2, 3, 3, 0 },
+                          { 0, 3, 3, 3 }};
+		
+		System.out.println(isPath( matrix));
+		
+	}
+}
