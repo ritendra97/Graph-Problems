@@ -1,0 +1,66 @@
+// Please have a look on it's time Complexity
+
+import java.util.*;
+public class GraphSolution {
+	public static boolean iPresent(char board[][], int r,int c,String word,int count) {
+		
+		if(count==word.length())
+			return true;
+		
+		if(r<0 || c<0 || r>=board.length || c>=board[0].length || board[r][c]!=word.charAt(count))
+			return false;
+		
+		char temp = board[r][c];
+		
+		board[r][c]='*';
+		
+		boolean flag = iPresent(board,r+1,c,word,count+1) ||iPresent(board,r-1,c,word,count+1)
+		||iPresent(board,r,c+1,word,count+1)
+		||iPresent(board,r,c-1,word,count+1)
+	    ||iPresent(board,r+1,c+1,word,count+1)
+	    ||iPresent(board,r+1,c-1,word,count+1)
+		||iPresent(board,r-1,c+1,word,count+1)
+		|| iPresent(board,r-1,c-1,word,count+1);
+		
+		board[r][c]=temp;
+		
+		return flag;
+	}
+	public static String[] wordBoggle(char board[][], String[] dictionary)
+    {
+        String ans[] = new String[board.length];
+        int  m =0;
+        for(int i=0;i<dictionary.length;i++) {
+        	
+        	String sp = dictionary[i];
+        	
+        	for(int j=0;j<board.length;j++) {
+        		
+        		for(int k=0;k<board[0].length;k++) {
+        			
+        			if(board[j][k]==sp.charAt(0)) {
+        				if(iPresent(board,j,k,sp,0))
+        					
+        					ans[m++]=sp;
+        			}
+        		}
+        	}
+        }
+        return Arrays.copyOf(ans, m);
+    }
+	public static void main(String[] args) {
+		
+		char board[][] = {{'G','I','Z'},
+				          {'U','E','K'},
+				          {'Q','S','E'}};
+		
+		String dictionary[] = {"GEEKS","FOR","QUIZ","GO"};
+		
+		String ans[] = wordBoggle(board,dictionary);
+		
+		for(String s:ans) {
+			System.out.println(s);
+		}
+	}
+
+}
