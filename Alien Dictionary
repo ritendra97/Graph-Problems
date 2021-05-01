@@ -1,0 +1,76 @@
+//Time Complexity: The first step to create a graph takes O(n + alhpa) time where n is
+//number of given words and alpha is number of characters in given alphabet. 
+//The second step is also topological sorting. Note that there would be alpha vertices and at-most (n-1) edges in the graph.
+//The time complexity of topological sorting is O(V+E) which is O(n + aplha) here. So overall time complexity is O(n + aplha) + O(n + aplha) which is O(n + aplha).
+
+import java.util.*;
+public class GraphSolution {
+	
+	public static void dfsUtil(int src,Stack<Integer> s,boolean visited[],ArrayList<ArrayList<Integer>> dictionary)
+    {
+    	visited[src]=true;
+    	for(Integer child :dictionary.get(src))
+    	{
+    		if(!visited[child])
+    			dfsUtil(child,s,visited,dictionary);
+    	}
+    	s.push(src);
+    }
+    public static String topologicalsor(boolean visited[],int K,ArrayList<ArrayList<Integer>> dictionary)
+    {
+    	Stack<Integer> s = new Stack<>();
+    	for(int i =0;i<K;i++)
+    	{
+    		if(!visited[i])
+    		{
+    			dfsUtil(i,s,visited,dictionary);
+    		}
+    	}
+    	String ans = "";
+    	while(!s.isEmpty())
+    	{
+    		ans+=(char)('a'+s.pop());
+    	}
+    	
+    	return ans;
+    }
+    public static void addEdge(int a,int b, ArrayList<ArrayList<Integer>> dictionary) {
+        
+        dictionary.get(a).add(b);
+    }
+    public static String  findOrder(String [] dict, int N, int K)
+    {
+        ArrayList<ArrayList<Integer>> dictionary = new ArrayList<ArrayList<Integer>>();
+        Stack<Character> st = new Stack<Character>();
+        boolean visited[] = new boolean[N];
+        
+        for(int i=0;i<K;i++){
+          
+          dictionary.add(i,new ArrayList<Integer>());
+            
+        }
+        
+        for(int i=0;i<dict.length-1;i++){
+            
+            String word1 = dict[i];
+            String word2 = dict[i+1];
+            
+            for(int j=0;j<Math.min(word1.length(),word2.length());j++) {
+                
+                if(word1.charAt(j)!=word2.charAt(j)) {
+                    
+                    addEdge(word1.charAt(j)-'a',word2.charAt(j)-'a',dictionary);
+                }
+            }
+        }
+        
+        return topologicalsor(visited,K,dictionary);
+    }
+	public static void main(String[] args) {
+
+		String[] dict = {"caa", "aaa", "aab"};
+		String ans= findOrder(dict,3,3);
+		System.out.println(ans);
+	}
+
+}
