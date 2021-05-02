@@ -27,7 +27,7 @@ public class GraphProblem
 		{
 			if(!visited[child])
 			{
-				iscycle(adj,visited,index,child);
+				if(iscycle(adj,visited,index,child)) return true;
 			}
 			else if(child!=parent)
 			{
