@@ -1,0 +1,61 @@
+//Solution: We can consider this problem as a graph (related to topological sorting) problem. 
+//All tasks are nodes of the graph and if task u is a prerequisite of task v, 
+//we will add a directed edge from node u to node v. Now, this problem is equivalent to detecting a cycle in the graph represented by prerequisites.
+//If there is a cycle in the graph, 
+//then it is not possible to finish all tasks (because in that case there is no any topological order of tasks). Both BFS and DFS can be used to solve it.
+
+
+
+
+import java.util.*;
+public class GraphSolution {
+	
+	public static boolean iscycleExist(ArrayList<ArrayList<Integer>> adj,boolean visited[],boolean recursion[],int index) {
+		if(recursion[index])
+			return true;
+		if(visited[index]==true && recursion[index]==false)
+			return false;
+		visited[index]=true;
+		recursion[index]=true;
+		List<Integer> childList = adj.get(index);
+		for(Integer child:childList)
+		{
+			if(iscycleExist(adj,visited,recursion,child))
+				return true;
+		}
+		recursion[index]=false;
+		return false;
+	}
+	
+    public static boolean isPossible(int N, int[][] prerequisites) {
+     
+    	boolean visited[] = new boolean[N];
+    	boolean recursion[] = new boolean[N];
+    	ArrayList<ArrayList<Integer>> adj = new ArrayList<ArrayList<Integer>>();
+    	
+        for(int i=0;i<N;i++) {	
+			adj.add(i,new ArrayList<Integer>());
+		}
+
+        for(int row []:prerequisites) {
+    		
+        	adj.get(row[1]).add(row[0]);
+    	}
+    	
+    	for(int i=0;i<N;i++)
+		{
+			if(iscycleExist(adj,visited,recursion,i))
+				return false;
+		}
+		return true;
+    }
+	public static void main(String[] args) {
+
+		int N = 2;
+		int P = 2;
+		
+		int prerequisites[][] = {{1,0},{0,1}};
+		System.out.println(isPossible(N,prerequisites));
+	}
+
+}
