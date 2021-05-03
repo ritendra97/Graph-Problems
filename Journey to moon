@@ -1,0 +1,68 @@
+TC-> O(V+E)
+SC-> O(v)
+
+import java.util.*;
+public class GraphSolution {
+	int V;
+	ArrayList<ArrayList<Integer>> astronaut;
+	boolean visited[];
+	int counter=0;
+	GraphSolution(int v)
+	{
+		V=v;
+		astronaut = new ArrayList<ArrayList<Integer>>(V);
+		visited = new boolean[V];
+		
+		for(int i=0;i<V;i++)
+		{
+			astronaut.add(i,new ArrayList<Integer>());
+		}
+		counter=0;
+	}
+	public void addEdge(int v,int w)
+	{
+		astronaut.get(v).add(w);
+		astronaut.get(w).add(v);
+	}
+	public void dfs(ArrayList<Integer> Solution ,int src) {
+		
+		visited[src]=true;
+		counter++;
+		ArrayList<Integer> children = astronaut.get(src);
+		for(int child:children) {
+			if(!visited[child]) {
+				dfs(Solution,child);
+			}
+		}
+	}
+	public int journeyToMoon(int n) {
+		
+		ArrayList<Integer> Solution = new ArrayList<Integer>();
+		for(int i=0;i<n;i++) {
+			if(!visited[i]) {
+				counter=0;
+				dfs(Solution,i);
+				Solution.add(counter);
+			}
+		}
+		int val = n*(n-1)/2;
+		for(int i=0;i<Solution.size();i++) {
+			
+			int x = Solution.get(i)*(Solution.get(i)-1)/2;
+			val = val-x;
+		}
+		return val;
+	}
+	public static void main(String[] args) {
+
+		int n=4;
+		
+		GraphSolution g = new GraphSolution(n);
+		
+		g.addEdge(1,2);
+		g.addEdge(2,3);
+		
+		System.out.println(g.journeyToMoon(n));
+	}
+
+}
