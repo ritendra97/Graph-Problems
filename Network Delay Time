@@ -1,0 +1,91 @@
+//Network Delay Time
+import java.util.*;
+class Edge{
+	int v;
+	int wgt;
+	Edge(int v,int wgt){
+		this.v=v;
+		this.wgt=wgt;
+	}
+}
+class pair{
+	int v;
+	int des;
+	pair(int v,int des){
+		this.v=v;
+		this.des=des;
+	}
+}
+public class GraphSolution {
+
+	public void addEdge(int u,int v,int w,ArrayList<ArrayList<Edge>> graph) {
+		
+		graph.get(u).add(new Edge(v,w));
+	}
+	
+	public int networkDelayTime(int n,int k,ArrayList<ArrayList<Edge>> graph) {
+		
+		PriorityQueue<pair> pq = new PriorityQueue<pair>(new Comparator<pair>() {
+			
+			public int compare(pair p1,pair p2) {
+				return p1.des-p2.des;
+			}
+		});
+		
+		boolean visited[] = new boolean[n+1];
+		int distance[] = new int[n+1];
+		Arrays.fill(distance, -1);
+		
+		distance[k]=0;
+		pq.add(new pair(k,0));
+		
+		while(!pq.isEmpty()) {
+			
+			pair po = pq.poll();
+			
+			if(visited[po.v]==true)
+				continue;
+			visited[po.v]=true;
+			
+			for(Edge e : graph.get(po.v)) {
+				
+				int V = e.v;
+				int dis = e.wgt;
+				if(po.v!=-1 && distance[po.v]+dis>distance[V] && !visited[V]) {
+					
+					distance[V] = distance[po.v]+dis;
+					pq.add(new pair(V,dis));
+				}
+			}
+		}
+		
+		int max = Integer.MIN_VALUE;
+		for(int i:distance) {
+			if(max<i) {
+				max=i;
+			}
+		}
+		if(max==0)
+			return -1;
+		
+		return max;
+	}
+	public static void main(String[] args) {
+		
+		GraphSolution g = new GraphSolution();
+		
+        ArrayList<ArrayList<Edge>> graph = new ArrayList<ArrayList<Edge>>();
+        
+        int n=4;
+        int k=2;
+        for(int i=0;i<=n;i++){
+            graph.add(i,new ArrayList<Edge>());
+        }
+        
+        g.addEdge(2,1,1,graph);
+        g.addEdge(2,3,1,graph);
+        g.addEdge(3,4,1,graph);
+        
+        System.out.println(g.networkDelayTime(n,k,graph));
+	}
+}
