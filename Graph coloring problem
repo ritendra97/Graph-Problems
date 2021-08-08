@@ -60,6 +60,7 @@ public class Graph
 		colorGraph();
 	}
 }
+Time Complexity O(v^2+E)
 
 import java.util.*;
 
