@@ -60,3 +60,71 @@ public class Graph
 		colorGraph();
 	}
 }
+
+import java.util.*;
+
+public class Practice {
+
+	private int v;
+	ArrayList<ArrayList<Integer>> graph;
+	public Practice(int V) {
+		v=V;
+		graph = new ArrayList<ArrayList<Integer>>();
+		for(int i=0;i<v;i++)
+		{
+			graph.add(i,new ArrayList<Integer>());
+		}
+	}
+	
+	public void addEdge(int u,int v) {
+		graph.get(u).add(v);
+		graph.get(v).add(u);
+	}
+	
+	public void greedyColoring() {
+		
+		int result[] = new int[v];
+		Arrays.fill(result, -1);
+		result[0]=0;
+		
+		boolean available[] = new boolean[v];
+		Arrays.fill(available, true);
+		
+		for(int u=1;u<v;u++) {
+			
+			ArrayList<Integer> children = graph.get(u);
+			
+			for(Integer child: children) {
+				
+				if(result[child]!=-1) {
+					available[result[child]]=false;
+				}
+			}
+			
+			int cr;
+			for(cr=0;cr<v;cr++) {
+				if(available[cr])
+					break;
+			}
+			
+			result[u]=cr;
+			
+			Arrays.fill(available, true);
+		}
+		for (int u = 0; u < v; u++)
+            System.out.println("Vertex " + u + " --->  Color "
+                                + result[u]);
+	}
+	
+	public static void main(String[] args) {
+		Practice g2 = new Practice(5);
+		 g2.addEdge(0, 1);
+	        g2.addEdge(0, 2);
+	        g2.addEdge(1, 2);
+	        g2.addEdge(1, 4);
+	        g2.addEdge(2, 4);
+	        g2.addEdge(4, 3);
+        System.out.println("Coloring of graph 1");
+        g2.greedyColoring();
+	}
+}
