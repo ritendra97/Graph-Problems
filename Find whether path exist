@@ -1,0 +1,59 @@
+//Find whether path exist
+import java.util.*;
+
+public class Graph {
+
+	public boolean is_Possible(int[][] grid) {
+		int n = grid.length;
+		boolean[][] vis = new boolean[n][n];
+
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (grid[i][j] == 1) {
+					return dfs(i, j, grid, vis);
+				}
+			}
+		}
+
+		return false;
+	}
+
+	boolean dfs(int i, int j, int[][] grid, boolean vis[][]) {
+		vis[i][j] = true;
+
+		int[][] des = { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
+
+		for (int k = 0; k < 4; k++) {
+			if (isSafe(i + des[k][0], j + des[k][1], grid, vis)) {
+				if (grid[i + des[k][0]][j + des[k][1]] == 2) {
+					return true;
+				}
+				if (dfs(i + des[k][0], j + des[k][1], grid, vis)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	boolean isSafe(int i, int j, int[][] grid, boolean vis[][]) {
+		int n = grid.length;
+
+		if ((i < 0) || (i >= n) || (j < 0) || (j >= n) || (grid[i][j] == 0) || (vis[i][j])) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public static void main(String[] args) {
+
+		Graph g = new Graph();
+		int grid[][] = { { 3, 0, 3, 0, 0 }, { 3, 0, 0, 0, 3 }, { 3, 3, 3, 3, 3 }, { 0, 2, 3, 3, 0 },
+				{ 3, 0, 0, 1, 3 } };
+
+		System.out.println(g.is_Possible(grid));
+
+	}
+}
