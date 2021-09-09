@@ -1,0 +1,49 @@
+import java.util.*;
+
+public class Graph {
+
+	public static int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+
+		HashMap<Integer, List<int[]>> map = new HashMap<>();
+		for (int row[] : flights) {
+			map.putIfAbsent(row[0], new ArrayList<int[]>());
+			map.get(row[0]).add(new int[] { row[1], row[2] });
+		}
+
+		PriorityQueue<int[]> pq = new PriorityQueue<int[]>(new Comparator<int[]>() {
+			public int compare(int[] o1, int[] o2) {
+				return Integer.compare(o1[1], o2[1]);
+			}
+		});
+
+		pq.offer(new int[] { src, 0, k });
+
+		while (!pq.isEmpty()) {
+
+			int[] temp = pq.remove();
+			int curr = temp[0];
+			int cost = temp[1];
+			int stop = temp[2];
+
+			if (curr == dst)
+				return cost;
+			if (stop >= 0) {
+
+				if (!map.containsKey(curr))
+					continue;
+
+				for (int[] next : map.get(curr)) {
+					pq.offer(new int[] { next[0], next[1] + cost, stop - 1 });
+				}
+			}
+
+		}
+
+		return -1;
+	}
+
+	public static void main(String[] args) {
+		int flights[][] = { { 0, 1, 100 }, { 1, 2, 100 }, { 0, 2, 500 } };
+		System.out.println(findCheapestPrice(3, flights, 0, 2, 1));
+	}
+}
