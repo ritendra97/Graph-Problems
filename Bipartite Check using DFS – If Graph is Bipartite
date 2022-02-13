@@ -1,0 +1,60 @@
+import java.util.*;
+// Topological sort using BFS
+
+public class Main6 {
+
+    int V;
+    List<ArrayList<Integer>> adj;
+    Map<Integer,Integer> inDegree;
+
+    Main6(int v){
+        V=v;
+        inDegree = new HashMap<Integer,Integer>();
+        adj = new ArrayList<>();
+        for(int i = 0;i<v;i++){
+            adj.add(new ArrayList<>());
+            inDegree.put(i,0);
+        }
+    }
+
+    public void addNode(int u, int v){
+        adj.get(u).add(v);
+        adj.get(v).add(u);
+        inDegree.put(v,inDegree.get(v)+1);
+    }
+
+    public boolean DFS(int src, int color[]){
+        List<Integer> children = adj.get(src);
+        for(Integer child:children){
+            if(color[child]==-1){
+                color[child] = 1-color[src];
+                if(!DFS(child,color)) return false;
+            }else if(color[child]==color[src]){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isBipartite(){
+        int color[] = new int[V];
+        Arrays.fill(color,-1);
+        for(int i = 0;i<V;i++){
+            if(color[i]==-1){
+                if(!DFS(i,color))return false;
+            }
+        }
+        return true;
+    }
+    public static void main(String [] args){
+        Main6 m = new Main6(6);
+        m.addNode(0,1);
+        m.addNode(1,2);
+        m.addNode(1,4);
+        m.addNode(1,5);
+        m.addNode(2,3);
+        m.addNode(3,4);
+        m.addNode(3,5);
+        System.out.println(m.isBipartite());
+    }
+}
