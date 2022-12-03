@@ -57,3 +57,67 @@ public class Graph {
 
 	}
 }
+
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+class rowandCol {
+	int row;
+	int col;
+
+	public rowandCol(int row, int col) {
+		this.row = row;
+		this.col = col;
+	}
+}
+
+public class Main {
+
+	public static boolean isSafe(int row, int col, boolean visited[][], int matrix[][]) {
+		return (row >= 0 && col >= 0 && row < matrix.length && col < matrix[0].length && visited[row][col] == false && matrix[row][col]!=-1);
+	}
+
+	public static boolean BFS(int row, int col, int matrix[][]) {
+
+		Queue<rowandCol> q = new LinkedList<rowandCol>();
+		boolean visited[][] = new boolean[matrix.length][matrix[0].length];
+
+		q.add(new rowandCol(row, col));
+		int rowarr[] = { 1, -1, 0, 0 };
+		int colarr[] = { 0, 0, 1, -1 };
+
+		while (q.size() > 0) {
+			rowandCol node = q.remove();
+			if (node.col == matrix[0].length - 1 && node.row == matrix.length - 1)
+				return true;
+
+			for (int i = 0; i < 4; i++) {
+				int nextrow = rowarr[i] + node.row;
+				int nextcol = colarr[i] + node.col;
+
+				if (isSafe(nextrow, nextcol, visited, matrix)) {
+					visited[nextrow][nextcol] = true;
+					q.add(new rowandCol(nextrow, nextcol));
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean possiblePath(int matrix[][]) {
+		return BFS(0, 0, matrix);
+	}
+
+	public static void main(String[] args) {
+
+		int matrix[][] = {  { 0, 0, 0, -1, 0 }, 
+							{ -1, 0, 0, -1, -1 }, 
+							{ 0, -1, 0, 0, 0 }, 
+							{ -1, 0, -1, 0, 0 },
+							{ 0, 0, -1, 0, 0 } };
+		System.out.print(possiblePath(matrix));
+
+	}
+}
